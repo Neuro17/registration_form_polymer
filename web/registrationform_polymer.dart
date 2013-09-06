@@ -32,9 +32,9 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
     validateCpassword();
   }
   
-  bool validateUsername() => !isEmpty(username, "username") && !alreadyExist(username, "username");
+  bool validateUsername() => !isEmpty(username, "username") && !alreadyExist(username, "username") && isCorrectLength(username, "username", 3, 10);
   bool validateMail() => !isEmpty(mail, "mail") && !alreadyExist(mail, "mail");
-  bool validatePassword() => !isEmpty(password, "password");
+  bool validatePassword() => !isEmpty(password, "password") && isCorrectLength(password, "password", 6, 8);
   bool validateCpassword() => !isEmpty(cPassword, "cPassword") && isEqualPass();
   
   bool isEmpty(String field, String type){
@@ -61,6 +61,13 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
       }
     }
     return false;
+  }
+  
+  bool isCorrectLength(String field, String type, int min, int max){
+    var error = "$type must be between $min and $max";
+    if(field.trim().length < min || field.trim().length > max)
+      setError(type, error);
+    return !(field.trim().length < min) && !(field.trim().length > max);
   }
   
   void setError(String type, String error){

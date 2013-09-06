@@ -90,6 +90,7 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
         break;
       case 'cPassword':
         cPassError = error;
+        break;
     }
   }
   

@@ -26,59 +26,57 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
           cPassError= "";  
   
   void validate(){
-    isEmptyUsername();
-    isEmptyPassword();
-    isEmptyCpassword();
-    isEmptyMail();
-    isEqualPass();
+    validateUsername();
+    validateMail();
+    validatePassword();
+    validateCpassword();
   }
   
-  bool isEmptyUsername(){
-    if(username.trim().isEmpty)
-      userError = "This field is required!";
-    return username.trim().isEmpty;
-  }
+  bool validateUsername() => !isEmpty(username, "username") && !alreadyExist(username, "username");
+  bool validateMail() => !isEmpty(mail, "mail") && !alreadyExist(mail, "mail");
+  bool validatePassword() => !isEmpty(password, "password");
+  bool validateCpassword() => !isEmpty(cPassword, "cPassword") && isEqualPass();
   
-  bool isEmptyMail(){
-    if(mail.trim().isEmpty)
-      mailError = "This field is required!";
-    return mail.trim().isEmpty;
-  }
-  
-  bool isEmptyPassword(){
-    if(password.trim().isEmpty)
-      passError = "This field is required!";
-    return password.trim().isEmpty;
-  }
-  
-  bool isEmptyCpassword(){
-    if(cPassword.trim().isEmpty)
-      cPassError = "This field is required!";
-    return cPassword.trim().isEmpty;
+  bool isEmpty(String field, String type){
+    var error = "";
+    if(field.trim().isEmpty)
+      error = "This field is required";
+    setError(type, error);
+    return field.trim().isEmpty;
   }
   
   bool isEqualPass(){
+    var error = "Password must match!";
     if(cPassword != password)
-      cPassError = "Password must match";
+      setError("cPassword", error);
+    return cPassword == password;
   }
   
-  bool alreadyExistMail() {
-    mailError = alreadyExist(mail, "mail");
-    return !mailError.trim().isEmpty;
-  }
-  
-  bool alreadyExistUsername() {
-    userError = alreadyExist(username, "username");
-    return !userError.trim().isEmpty;
-  }
-  
-  String alreadyExist(String field, String type){
+  bool alreadyExist(String field, String type){
+    var error = "This $type already exixt";
     for(final user in users){
       if(field.compareTo(user[type]) == 0){
-          return "This $type already exixt";           
+          setError(type, error);
+          return true;
       }
     }
-    return "";
+    return false;
+  }
+  
+  void setError(String type, String error){
+    switch(type){
+      case 'username':
+        userError = error;
+        break;
+      case 'mail':
+        mailError = error;
+        break;
+      case 'password':
+        passError = error;
+        break;
+      case 'cPassword':
+        cPassError = error;
+    }
   }
   
 }

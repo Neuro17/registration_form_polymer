@@ -5,9 +5,9 @@
     <polymer-element name="my-registration-form">
       <template>
         <div>
-          <input type="text"  on-key-up="alreadyExistUsername" value="{{username}}" placeholder="Username">
+          <input type="text" on-key-up="validateUsername" value="{{username}}" placeholder="Username">
           <span>{{ userError }} </span><br><br>
-          <input type="text" value="{{mail}}" on-key-up="alreadyExistMail" placeholder="Email">
+          <input type="text" on-key-up="validateMail" value="{{mail}}" placeholder="Email">
           <span>{{ mailError }} </span><br><br>
           <input type="text" value="{{password}}" placeholder="Password">
           <span>{{ passError }} </span><br><br>

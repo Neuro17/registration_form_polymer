@@ -1,6 +1,7 @@
 import 'package:polymer/polymer.dart';
+import 'dart:html';
 
-List <Map> users = [
+List<Map<String, String>> users = [
   {
     'username'  :   'admin',
     'mail' :        'admin@admin.com',
@@ -26,14 +27,12 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
           cPassError= "";  
   
   void validate(){
-    validateUsername();
-    validateMail();
-    validatePassword();
-    validateCpassword();
+    if(validateUsername() && validateMail() && validatePassword() && validateCpassword())
+      window.alert("Your account is ready!");
   }
   
   bool validateUsername() => !isEmpty(username, "username") && !alreadyExist(username, "username") && isCorrectLength(username, "username", 3, 10);
-  bool validateMail() => !isEmpty(mail, "mail") && !alreadyExist(mail, "mail");
+  bool validateMail() => !isEmpty(mail, "mail") && isEmail() && !alreadyExist(mail, "mail");
   bool validatePassword() => !isEmpty(password, "password") && isCorrectLength(password, "password", 6, 8);
   bool validateCpassword() => !isEmpty(cPassword, "cPassword") && isEqualPass();
   
@@ -43,6 +42,14 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
       error = "This field is required";
     setError(type, error);
     return field.trim().isEmpty;
+  }
+  
+  bool isEmail() {
+    var error = "Insert a valid email address";
+    RegExp exp = new RegExp(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b');
+    if(!exp.hasMatch(mail))
+      setError("mail", error);
+    return exp.hasMatch(mail);
   }
   
   bool isEqualPass(){
@@ -56,8 +63,8 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
     var error = "This $type already exixt";
     for(final user in users){
       if(field.compareTo(user[type]) == 0){
-          setError(type, error);
-          return true;
+        setError(type, error);
+        return true;
       }
     }
     return false;

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <polymer-element name="my-registration-form">
+      <template>
+        <div>
+          <input type="text"  on-key-up="alreadyExistUsername" value="{{username}}" placeholder="Username">
+          <span>{{ userError }} </span><br><br>
+          <input type="text" value="{{mail}}" on-key-up="alreadyExistMail" placeholder="Email">
+          <span>{{ mailError }} </span><br><br>
+          <input type="text" value="{{password}}" placeholder="Password">
+          <span>{{ passError }} </span><br><br>
+          <input type="text" value="{{cPassword}}" placeholder="Confirm password">
+          <span>{{ cPassError }} </span><br><br>
+          
+          <button type="submit" on-click="validate">submit</button>
+        </div>
+      </template>
+      <script type="application/dart" src="registrationform_polymer.dart"> </script>
+    </polymer-element>
+  </body>
+</html>

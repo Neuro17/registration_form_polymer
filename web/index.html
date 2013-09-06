@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sample registration form using polymer</title>
+    
+    <!-- import the registration form -->
+    <link rel="import" href="registrationform_polymer.html">
+  </head>
+  <body>
+    <h1>Sample registration form using polymer.dart</h1>
+    
+    <template id="registration_form_template" bind>
+      <my-registration-form id="registration_form" userMessage="{{}}"></my-registration-form>
+    </template>
+
+    <script type="application/dart" src="index.dart"></script>
+    <script src="packages/polymer/boot.js"></script>
+  </body>
+</html>

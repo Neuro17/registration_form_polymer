@@ -9,9 +9,9 @@
           <span>{{ userError }} </span><br><br>
           <input type="text" on-key-up="validateMail" value="{{mail}}" placeholder="Email">
           <span>{{ mailError }} </span><br><br>
-          <input type="text" on-key-up="validatePassword" value="{{password}}" placeholder="Password">
+          <input type="password" on-key-up="validatePassword" value="{{password}}" placeholder="Password">
           <span>{{ passError }} </span><br><br>
-          <input type="text" on-key-up="validateCpassword" value="{{cPassword}}" placeholder="Confirm password">
+          <input type="password" on-key-up="validateCpassword" value="{{cPassword}}" placeholder="Confirm password">
           <span>{{ cPassError }} </span><br><br>
           
           <button type="submit" on-click="validate">submit</button>

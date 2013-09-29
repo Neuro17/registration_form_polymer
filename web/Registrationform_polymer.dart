@@ -1,17 +1,6 @@
 import 'package:polymer/polymer.dart';
 import 'dart:html';
-
-List<Map<String, String>> users = [
-  {
-    'username'  :   'admin',
-    'mail' :        'admin@admin.com',
-  },
-  
-  {
-    'username'  :   'user',
-    'mail' :        'user@user.com',
-  }
-];
+import 'dart:json' as JSON;
 
 @CustomTag("my-registration-form")
 class RegistrationForm extends PolymerElement with ObservableMixin {
@@ -26,13 +15,17 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
           cPassword = "",
           cPassError= "";  
   
+  @observable String checkUsername = 'http://localhost:8082/checkUsername';
+  @observable String checkMail = 'http://localhost:8082/checkMail';
+  @observable bool test = false;
+  
   void validate(){
     if(validateUsername() && validateMail() && validatePassword() && validateCpassword())
       window.alert("Your account is ready!");
   }
   
-  bool validateUsername() => !isEmpty(username, "username") && !alreadyExist(username, "username") && isCorrectLength(username, "username", 3, 10);
-  bool validateMail() => !isEmpty(mail, "mail") && isEmail() && !alreadyExist(mail, "mail");
+  bool validateUsername() => !isEmpty(username, "username") && isCorrectLength(username, "username", 3, 10) && !alreadyExist(username, "username", checkUsername);
+  bool validateMail() => !isEmpty(mail, "mail") && isEmail() && !alreadyExist(mail, "mail", checkMail);
   bool validatePassword() => !isEmpty(password, "password") && isCorrectLength(password, "password", 6, 8);
   bool validateCpassword() => !isEmpty(cPassword, "cPassword") && isEqualPass();
   
@@ -59,15 +52,17 @@ class RegistrationForm extends PolymerElement with ObservableMixin {
     return cPassword == password;
   }
   
-  bool alreadyExist(String field, String type){
-    var error = "This $type already exixt";
-    for(final user in users){
-      if(field.compareTo(user[type]) == 0){
-        setError(type, error);
-        return true;
-      }
-    }
-    return false;
+  bool alreadyExist(String field, String type, String action){
+    var error = "";
+      HttpRequest.request(action,
+          method: "post",
+          sendData: JSON.stringify({type: field}))
+        .then((HttpRequest req) {
+          error = req.responseText;
+          setError(type, error);
+        })
+        .catchError((e) => print(e));
+      return !error.trim().isEmpty;
   }
   
   bool isCorrectLength(String field, String type, int min, int max){

@@ -33,6 +33,10 @@ packages:
     description: html_import
     source: hosted
     version: "0.6.21+3"
+  http_server:
+    description: http_server
+    source: hosted
+    version: "0.7.5"
   js:
     description: js
     source: hosted
@@ -49,6 +53,10 @@ packages:
     description: meta
     source: hosted
     version: "0.6.21+3"
+  mime:
+    description: mime
+    source: hosted
+    version: "0.7.5"
   mutation_observer:
     description: mutation_observer
     source: hosted

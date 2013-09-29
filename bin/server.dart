@@ -1,14 +1,34 @@
 import 'dart:io';
 import 'package:http_server/http_server.dart';
+import 'dart:json' as JSON;
 
-echo(HttpRequest req) {
-  print('received submit');
+List<Map<String, String>> users = [
+   {
+     'username'  :   'admin',
+     'mail' :        'admin@admin.com',
+   },
+   
+   {
+     'username'  :   'user',
+     'mail' :        'user@user.com',
+   }
+];
+
+alreadyExist(HttpRequest req, String type){
+  print("Checking if $type already exist");
   HttpBodyHandler.processRequest(req).then((HttpBody body) {
-    print(body.body.runtimeType); // Map
     req.response.headers.add('Access-Control-Allow-Origin', '*');
     req.response.headers.add('Content-Type', 'text/plain');
+    var field = JSON.parse(body.body);
+    for(final user in users){
+      if(field[type] == user[type]){
+        req.response.write("This $type already exist");
+        req.response.statusCode = 201;
+        req.response.close();
+      }
+    }   
+    req.response.write("");
     req.response.statusCode = 201;
-    req.response.write(body.body.toString());
     req.response.close();
   });
 }
@@ -18,11 +38,11 @@ main() {
   HttpServer.bind('0.0.0.0', port).then((HttpServer server) {
     print('Server is running on port $port');
     server.listen((HttpRequest req) {
-      if (req.uri.path == '/submit' && req.method == 'POST') {
-        echo(req);
+      if (req.uri.path == '/checkUsername' && req.method == 'POST') {
+        alreadyExist(req, "username");
       }
-      if(req.uri.path == '/home')
-        print("ciao");
+      if(req.uri.path == '/checkMail' && req.method == 'POST')
+        alreadyExist(req, "mail");
     });
   });
 }
